@@ -1,0 +1,91 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Tix
+ * 
+ * A very tiny event loop that emulates node.js main loop
+ */
+class Tix extends stdClass
+{
+    private $queue;
+
+    private $filename;
+
+    /**
+     *  Constructor
+     * 
+     * @param   string  $filename
+     */
+    public function __construct($filename) {
+        ! is_file($filename) && die("File {$filename} isn't exists");
+
+        $this->queue = new SplQueue;
+        $this->filename = $filename;
+    }
+
+    public function import($filename, $as) {
+        if ( ! is_file($filename) ) {
+            throw new Exception("The {$filename} isn't found!");
+        }
+
+        $this->{$as} = require($filename);
+        return $this->{$as};
+    }
+
+    /**
+     *  Push a new function into the main loop
+     * 
+     * @param   Closure  $fn
+     * @return  void
+     */
+    public function push(Closure $fn): void {
+        $this->queue->enqueue($fn);
+    }
+
+    /**
+     * Loop
+     * 
+     * @return void
+     */
+    public function loop(): void {
+
+        $filename = $this->filename;
+
+        ((function() use($filename) {
+            require($filename);
+            return $this;
+        })->bindTo($this))();
+
+        while ( true ) {
+            while (! $this->queue->isEmpty()) {
+                (($this->queue->pop())->bindTo($this))();
+                usleep(200000);
+            }
+            usleep(200000);
+        }
+    }
+}
+
+/**
+ * Push the specified function(s) into the main loop
+ */
+function tixify(Closure ...$fn): Tix {
+    global $tix;
+    foreach ( $fn as $f ) {
+        $tix->push($f);
+    }
+    return $tix;
+}
+
+/**
+ * Construct the Tix main loop
+ */
+$tix = new Tix(
+    $argv[1] ?? die("empty filename specified")
+);
+
+/**
+ * Run the main loop
+ */
+$tix->loop();
