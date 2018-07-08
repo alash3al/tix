@@ -57,7 +57,7 @@ return new class {
 <?php
 
     // import "timer.tix" as "timer"
-    import("timer.tix", "timer");
+    $this->import("timer.tix", "timer");
 
     // run a function each 2 seconds
     $this->timer->setInterval(function(){
