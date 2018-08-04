@@ -42,7 +42,7 @@ final class Tix extends \stdClass
      * @return  void
      */
     public function loadScript($filename): void {
-        ((function() {
+        ((function() use ($filename) {
             require($filename);
             return $this;
         })->bindTo($this))();
@@ -69,7 +69,7 @@ final class Tix extends \stdClass
             while (! $this->queue->isEmpty()) {
                 (($this->queue->pop())->bindTo($this))();
             }
-            usleep(self::RESOLUTION);
+            $this->exit();
         }
     }
 }
