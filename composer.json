@@ -15,6 +15,9 @@
     "autoload-dev": {
         "psr-4": { "alash3al\\tix\\Tests\\": "tests" }
     },
+    "bin": [
+        "tix"
+    ],
     "license": "MIT",
     "authors": [
         {

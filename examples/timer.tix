@@ -1,0 +1,19 @@
+<?php
+
+// import "timer.tix" as "timer"
+$timer = require_once(__DIR__."/lib/timer.tix");
+
+$end = time() + 10; // 10 seconds;
+
+// run a function each 2 seconds
+$this->push(
+    $timer(function($start, $tick, $diff, $timeout) use ($end) {
+        echo time() . "\n";
+
+        // Addition to show exits once no more executing code
+        if($tick == $end) {
+            echo "All done now" . PHP_EOL;
+            $this->exit();
+        }
+    }, 2)
+);

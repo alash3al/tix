@@ -1,0 +1,55 @@
+#!/usr/bin/env php
+<?php
+/*
+ * This file is part of Tix.
+ */
+if (version_compare('7.1.0', PHP_VERSION, '>')) {
+    fwrite(
+        STDERR,
+        sprintf(
+            'This version of Tix is supported on PHP 7.1+.' . PHP_EOL .
+            'You are using PHP %s (%s).' . PHP_EOL,
+            PHP_VERSION,
+            PHP_BINARY
+        )
+    );
+    die(1);
+}
+
+if (!ini_get('date.timezone')) {
+    ini_set('date.timezone', 'UTC');
+}
+
+foreach ([
+    '/../../autoload.php',
+    '/../vendor/autoload.php',
+    '/vendor/autoload.php',
+  ] as $file) {
+    if (file_exists(__DIR__ . $file)) {
+        define('TIX_COMPOSER_INSTALL', __DIR__ . $file);
+        break;
+    }
+}
+unset($file);
+
+if (!defined('TIX_COMPOSER_INSTALL')) {
+    fwrite(
+        STDERR,
+        'You need to set up the project dependencies using Composer:' .
+        PHP_EOL . PHP_EOL .
+        '    composer install' . PHP_EOL . PHP_EOL .
+        'You can learn all about Composer on https://getcomposer.org/.' .
+        PHP_EOL
+    );
+    die(1);
+}
+
+$mainScriptFile = $argv[1] ?? die("empty filename specified");
+! is_file($mainScriptFile) && die("File {$mainScriptFile} doesn't exist");
+
+require TIX_COMPOSER_INSTALL;
+
+$tix = new alash3al\tix\Tix();
+
+$tix->loadScript($mainScriptFile);
+$tix->loop();
