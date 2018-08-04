@@ -18,53 +18,26 @@ $ ./tix hello.tix
 > Hello World
 ```
 
-Timer Module?
-=============
-```php
+Examples
+========
 
-<?php
-class Timer {
-    protected $start;
+Examples are located in the `examples` folder of this repo. The `lib`
+subdirectory is for supporting code for examples.
 
-    function __construct() {
-        $this->start = time();
-    }
+The syntax has changed since the original code push.
 
-    function setInterval($fn, $intval) {
-        $self = $this;
-        $call = function() use($self, $fn, $intval, &$call) {
-            $now = time();
-            $diff = ($now - $this->start);
-            if ( $diff >= $intval ) {
-                $this->start = time();
-                $fn();
-            }
-            tixify($call);
-        };
-        tixify($call);
-    }
-};
+### Hello Example
 
-return new class {
-    function setInterval($fn, $intval) {
-        return (new Timer())->setInterval($fn, $intval);
-    }
-};
-```
-
-**example.tix:**
-```
-<?php
-
-    // import "timer.tix" as "timer"
-    $this->import("timer.tix", "timer");
-
-    // run a function each 2 seconds
-    $this->timer->setInterval(function(){
-        echo time() . "\n";
-    }, 2);
-```
+This is a simple hello-world example
 
 ```bash
-$ ./tix example.tix
+$ ./tix examples/hello.tix
+```
+
+### Timer Example
+
+This is a setInterval example using code similar to the test suite
+
+```bash
+$ ./tix examples/timer.tix
 ```
