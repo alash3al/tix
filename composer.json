@@ -1,0 +1,30 @@
+{
+    "name": "alash3al/tix",
+    "description": "a super simple stupid event-loop kernel in pure PHP",
+    "type": "library",
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "ext-xdebug": "*",
+        "phpunit/phpunit": "^6.0"
+    },
+    "autoload": {
+        "psr-4": { "alash3al\\tix\\": "src" }
+    },
+    "autoload-dev": {
+        "psr-4": { "alash3al\\tix\\Tests\\": "tests" }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohammed Al Ashaal",
+            "email": "m7medalash3al@gmail.com"
+        },
+        {
+            "name": "Lewis Cowles",
+            "email": "lewiscowles@me.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
